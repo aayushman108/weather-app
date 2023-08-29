@@ -7,7 +7,70 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*{
+  box-sizing: border-box;
 }
+
+
+.react-multiple-carousel__arrow {
+  position: absolute;
+  outline: 0;
+  transition: all .5s;
+  border-radius: 35px;
+  z-index: 1000;
+  border: 0;
+  background: none;
+  min-width: 43px;
+  min-height: 43px;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.react-multiple-carousel__arrow.react-multiple-carousel__arrow--left {
+  left: 1px;
+}
+.react-multiple-carousel__arrow.react-multiple-carousel__arrow--right {
+  right: 1px;
+}
+
+.btn-class{
+  min-width: 150px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: '2';
+  border-radius: 4px;
+  margin: 0 10px;
+}
+.btn-class.active{
+  background-color: rgb(5, 5, 151, 0.4);
+}
+
+.searchBar{
+  padding: 0.5em 0.7em;
+  border: 2px solid transparent;
+  outline: none;
+}
+.searchBar:focus{
+  border: 2px solid rgb(5, 5, 151);
+}
+.search-btn{
+  padding: 0.5em 0.7em;
+  border: 2px solid transparent;
+  outline: none;
+  background-color: white;
+}
+.bi-search{
+  color: black;
+}
+.search-btn:hover{
+  border: 2px solid rgb(5, 5, 151);
+}
+.search-btn:active{
+  background-color: rgb(5, 5, 151);
+  transform: scale(0.90);
+}
+
+.search-btn:active .bi-search{
+  color: white;
+}
+
