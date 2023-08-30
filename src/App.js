@@ -45,7 +45,13 @@ function App() {
   },[])
 
   const backgroundImageUrl = process.env.PUBLIC_URL + '/images/weather.jpg';
-  const backgroundImageUrlCurrent = process.env.PUBLIC_URL + '/images/weather2.jpg';
+  const backgroundImageUrlCurrent = process.env.PUBLIC_URL + `/images/${data[0].main}.jpg`;
+  if(backgroundImageUrlCurrent){
+    var bgImg= `url(${backgroundImageUrlCurrent})`;
+  }else{
+    bgImg= `url(${backgroundImageUrl})`;
+  }
+
   const styles = {
     position: 'relative',
     zIndex: 0,
@@ -74,7 +80,7 @@ function App() {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundImage: `url(${backgroundImageUrlCurrent})`,
+    backgroundImage: bgImg,
     backgroundSize: 'cover',
     backgroundPosition: 'center', 
     opacity: 0.2,
@@ -233,19 +239,19 @@ function App() {
             
           <div className='d-flex flex-wrap' >
             <div className='mx-2' >
-              <p className='my-0' >wind<i class="bi bi-info-circle"></i></p>
+              <p className='my-0' >wind</p>
               <h6 className='my-0' >{data[0].speed}{velUnit}</h6>
             </div>
             <div className='mx-2' >
-              <p className='my-0' >Humidity<i class="bi bi-info-circle"></i></p>
+              <p className='my-0' >Humidity</p>
               <h6 className='my-0' >{data[0].humidity}%</h6>
             </div>
             <div className='mx-2' >
-              <p className='my-0' >Visibility<i class="bi bi-info-circle"></i></p>
+              <p className='my-0' >Visibility</p>
               <h6 className='my-0' >{data[0].visibility}m</h6>
             </div>
             <div className='mx-2' >
-              <p className='my-0' >Pressure<i class="bi bi-info-circle"></i></p>
+              <p className='my-0' >Pressure</p>
               <h6 className='my-0' >{data[0].pressure}hPa</h6>
             </div>
           </div>
