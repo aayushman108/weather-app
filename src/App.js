@@ -17,16 +17,19 @@ function App() {
   const [forecast, setForecast]= useState([]);
   const [error, setError]= useState('');
   const [active, setActive]= useState(0);
+  const [unit, setUnit]= useState("metric");
+  const [home, setHome]= useState("")
    
   useEffect(()=>{
     navigator.geolocation.getCurrentPosition(
       async function(position){
         const latitude= position.coords.latitude;
         const longitude= position.coords.longitude;
-        const data= await getFormattedData({lat: latitude, lon: longitude, units: "metric"});
+        const data= await getFormattedData({lat: latitude, lon: longitude, units: unit});
         const data1Keys= Object.keys(data[1]);
         const data1Values= Object.values(data[1]);
         setForecast(data[1][data1Keys[0]]);
+        setHome(data[0].place);
         setData(data);
         setBtn(data1Keys);
         setBtnIcon(data1Values);
@@ -117,10 +120,10 @@ function App() {
     setActive(index);
   }
 
-    const fetchData = async (e) => {
+    const fetchData = async (e, newUnit) => {
       e.preventDefault();
       try{
-      const data = await getFormattedData({ q: cityName, units: "metric" });
+      const data = await getFormattedData({ q: cityName || home, units: newUnit || unit});
       if (!Array.isArray(data)) {
         throw new Error(data);
       }
@@ -128,14 +131,21 @@ function App() {
       const data1Values= Object.values(data[1]);
       setForecast(data[1][data1Keys[0]]);
       setData(data);
+      setUnit(newUnit || unit);
       setBtn(data1Keys);
       setBtnIcon(data1Values);
+      setCityName('');
+      setHome(data[0].place);
     } 
     catch(error){
       console.log(error)
       setError(error.message);
     }
     };
+
+    const handleUnit= (e, unit)=>{
+      fetchData(e, unit)
+    }
 
     if(error){
       return (
@@ -159,19 +169,40 @@ function App() {
         )
     }
 
+    let tempUnit;
+    let velUnit;
+    
+    if (unit==="metric"){
+      tempUnit= "C";
+      velUnit= "m/s";
+    }else{
+      tempUnit= "F";
+      velUnit= "mph"
+    }
+
   return (
     <>
     {data.length > 1 && <div style={styles}>
     <div style={pseudoStyles}></div>
     <div className="container-fluid" style={{"backgroundColor": "#e5e5ff"}}>
       <div className='row justify-content-around py-2' >
-        <div className='col-4 d-flex flex-wrap align-items-center'>
-          <h3 className='mb-0'>Weather</h3>
+        <div className='col-lg-4 col-md-3 col-sm-3 col-5 d-flex px-0 flex-wrap align-items-center' style={{}}>
+          <h3 className='mb-0 mx-md-4 px-md-0 px-sm-2 px-4'>Weather</h3>
         </div>
-        <form className='col-md-6 col-8 text-end py-2' >
+
+        <div className='d-sm-none d-block col-3 px-0 text-end' style={{}}>
+          <button className="search-btn" onClick={(e)=> fetchData(e)} disabled={!cityName}><i className="bi bi-search"></i></button>
+        </div>
+
+        <form className='col-lg-7 col-md-7 col-sm-6 d-none d-sm-block px-0  text-end py-2' style={{}}>
           <input type="search" className='searchBar' value={cityName} onChange={e=> setCityName(e.target.value)} placeholder='search...' />
           <button className="search-btn" onClick={(e)=> fetchData(e)} disabled={!cityName}><i className="bi bi-search"></i></button>
         </form>
+
+        <div className='col-md-2 col-lg-1 col-sm-3 col-4 px-sm-0 pl-4  d-flex flex-wrap align-items-center justify-content-sm-center justify-content-start' style={{}}>
+          <button className={` temp-btn ${unit==="metric"? "active": ""}`} style={{}} onClick={(e)=> handleUnit(e, "metric")}>&deg;C</button>
+          <button className={`mx-1 temp-btn ${unit==="imperial"? "active": ""}`} style={{}} onClick={(e)=> handleUnit(e, "imperial")}>&deg;F</button>
+        </div>
       </div>
     </div>
     <div className="container-lg container-fluid px-lg-0 px-4 mt-4 mb-2 pt-4 pb-1" style={{"color":"white"}}>
@@ -192,18 +223,18 @@ function App() {
             <div className="" style={{"height":"100px"}}>
               <img className='' src={`http://openweathermap.org/img/wn/${data[0].icon}.png`} alt="..." style={{"boxShadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", "height":"100%", "width":"auto"}} />
             </div>
-            <h1 className='m-0 px-2 align-self-center' >{data[0].temp.toFixed()}&deg;C</h1>
+            <h1 className='m-0 px-2 align-self-center' >{data[0].temp.toFixed()}&deg;{tempUnit}</h1>
             <div className='mx-4 align-self-center' >
               <h5 className='mb-0'  >{data[0].main}</h5>
               <p className='mb-2' >{data[0].description}</p>
-              <p  className='mb-0' >Feels like {data[0].feels_like.toFixed()}&deg;C</p>
+              <p  className='mb-0' >Feels like {data[0].feels_like.toFixed()}&deg;{tempUnit}</p>
             </div>
           </div>
             
           <div className='d-flex flex-wrap' >
             <div className='mx-2' >
               <p className='my-0' >wind<i class="bi bi-info-circle"></i></p>
-              <h6 className='my-0' >{data[0].speed}m/s</h6>
+              <h6 className='my-0' >{data[0].speed}{velUnit}</h6>
             </div>
             <div className='mx-2' >
               <p className='my-0' >Humidity<i class="bi bi-info-circle"></i></p>
@@ -258,7 +289,7 @@ function App() {
       <div className='container-fluid' >
       <Carousel responsive={hourResponsive}>
       {forecast.map((item, index)=>{
-          //const formattedDate= DateTime.fromFormat(item, 'MMMM dd, yyyy').toFormat('ccc, MMM d');
+          
           const {dt, main: {temp, feels_like, humidity, pressure}, weather, wind:{speed, deg, gust}, visibility, pop, dt_txt, clouds:{all}}= item;
           const temperature= temp.toFixed();
           const {main: condition, description, icon}= weather[0];
@@ -278,17 +309,17 @@ function App() {
             <div className="" style={{"height":"100px"}}>
               <img className='' src={`http://openweathermap.org/img/wn/${icon}.png`} alt="..." style={{"boxShadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", "height":"100%", "width":"auto"}} />
             </div>
-            <h3 className='m-0 px-2 align-self-center' >{temperature}&deg;C</h3>
+            <h3 className='m-0 px-2 align-self-center' >{temperature}&deg;{tempUnit}</h3>
             <div className='mx-sm-4 mx-2 align-self-center' >
               <h5 className='mb-2 mt-sm-0 mt-3' >{condition}</h5>
-              <p  className='mb-0' >Feels like {feels_like.toFixed()}&deg;C</p>
+              <p  className='mb-0' >Feels like {feels_like.toFixed()}&deg;{tempUnit}</p>
             </div>
           </div>
             
           <div className='d-flex flex-wrap' >
             <div className='m-md-2 m-2' >
               <p className='my-0' >wind</p>
-              <h6 className='my-0' >{speed}m/s</h6>
+              <h6 className='my-0' >{speed}{velUnit}</h6>
             </div>
             <div className='m-md-2 m-2' >
               <p className='my-0' >Humidity</p>
@@ -312,7 +343,7 @@ function App() {
             </div>
             <div className='m-md-2 m-2' >
               <p className='m-0' >Wind gust</p>
-              <h6 className='my-0' >{gust}m/s</h6>
+              <h6 className='my-0' >{gust}{velUnit}</h6>
             </div>
           </div>
         </div>

@@ -106,3 +106,16 @@ body {
   border-radius: 4px;
   color: white;
 }
+
+.temp-btn{
+  border: none;
+  width: 30px;
+  height: 30px;
+}
+.temp-btn:hover{
+  border: 2px solid rgb(5, 5, 151); 
+}
+.temp-btn.active{
+  background-color: rgb(5, 5, 151);
+  color: white;
+}
