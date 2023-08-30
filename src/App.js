@@ -7,7 +7,6 @@ import { hourResponsive } from './data';
 import { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import SunriseSunsetProgressBar from './SunriseSunsetProgressBar';
-import { isDisabled } from '@testing-library/user-event/dist/utils';
 
 function App() {
   const [cityName, setCityName]= useState('');
@@ -24,7 +23,7 @@ function App() {
       async function(position){
         const latitude= position.coords.latitude;
         const longitude= position.coords.longitude;
-        const data= await getFormattedData({lat: latitude, lon: longitude});
+        const data= await getFormattedData({lat: latitude, lon: longitude, units: "metric"});
         const data1Keys= Object.keys(data[1]);
         const data1Values= Object.values(data[1]);
         setForecast(data[1][data1Keys[0]]);
@@ -77,7 +76,7 @@ function App() {
     backgroundPosition: 'center', 
     opacity: 0.2,
     zIndex: -1,
-    borderRadius: "10px"
+    borderRadius: "5px"
   };
 
   const pseudoStylesButton = {
@@ -112,14 +111,6 @@ function App() {
     borderRadius: "4px"
   };
 
-  const currentDataStyle={
-    flexBasis: "70%",
-    position: "relative",
-    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    zIndex: 1,
-    borderRadius: "10px", 
-  }
-
   const handleClick= (item, index)=>{
     const date= item;
     setForecast(data[1][date]);
@@ -129,7 +120,7 @@ function App() {
     const fetchData = async (e) => {
       e.preventDefault();
       try {
-        const data = await getFormattedData({ q: cityName });
+        const data = await getFormattedData({ q: cityName, units: "metric" });
         console.log(data)
         setData(data)
       } catch (error) {
@@ -138,7 +129,7 @@ function App() {
     };
 
     if(error){
-      return <h1 className='text-center' style={{}}>Error fetching data:{error}</h1>
+      return <h1 className='text-center' >Error fetching data:{error}</h1>
     }
 
     if(isLoading){
@@ -150,85 +141,85 @@ function App() {
     {data.length > 1 && <div style={styles}>
     <div style={pseudoStyles}></div>
     <div className="container-fluid" style={{"backgroundColor": "#e5e5ff"}}>
-      <div className='row justify-content-end py-2' style={{}}>
-        <form className='col-12 text-end py-2' style={{}}>
+      <div className='row justify-content-end py-2' >
+        <form className='col-12 text-end py-2' >
           <input type="search" className='searchBar' value={cityName} onChange={e=> setCityName(e.target.value)} placeholder='search...' />
           <button className="search-btn" onClick={(e)=> fetchData(e)} disabled={!cityName}><i className="bi bi-search"></i></button>
         </form>
       </div>
     </div>
-    <div className="container mt-4 mb-2 pt-4 pb-1" style={{"color":"white"}}>
-      <div className='row row-cols-2 justify-content-between' style={{}}>
-        <div className='col-3 text-start p-0' style={{}}>{data[0].place}, {data[0].country}</div>
-        <div className="col-3 text-end p-0" style={{}}>{data[0].formattedDate}</div>
+    <div className="container-lg container-fluid px-lg-0 px-4 mt-4 mb-2 pt-4 pb-1" style={{"color":"white"}}>
+      <div className='row row-cols-2 justify-content-between' >
+        <div className='col-lg-3 col-4-md col-5 text-start p-0' >{data[0].place}, {data[0].country}</div>
+        <div className="col-lg-3 col-4-md col-7 text-end p-0" >{data[0].formattedDate}</div>
       </div>
     </div>
-    <div className="container p-0" style={{"color":"white"}}>
-      <div className='d-flex flex-wrap justify-content-between p-0' style={{}}>
-        <div className='text-start p-3' style={currentDataStyle}>
+    <div className="container-lg container-fluid px-4 p-lg-0" style={{"color":"white"}}>
+      <div className='row d-lg-flex flex-wrap justify-content-between flex-md-row flex-column p-0' >
+        <div className='col-12 text-start p-3 current-data-style' >
         <div style={pseudoStylesCurrent}></div>
           <div className=' mb-4'>
-            <p className='my-0' style={{}}>Current weather</p>
-            <p className='my-0' style={{}}>{data[0].formattedTime}</p>
+            <p className='my-0' >Current weather</p>
+            <p className='my-0' >{data[0].formattedTime}</p>
           </div>
-          <div className='d-flex flex-wrap mb-4' style={{}}>
+          <div className='d-flex flex-wrap mb-4' >
             <div className="" style={{"height":"100px"}}>
               <img className='' src={`http://openweathermap.org/img/wn/${data[0].icon}.png`} alt="..." style={{"boxShadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", "height":"100%", "width":"auto"}} />
             </div>
-            <h1 className='m-0 px-2' style={{}}>{data[0].temp.toFixed()}&deg;K</h1>
-            <div className='mx-4' style={{}}>
-              <h5 className='mb-0' style={{}} >{data[0].main}</h5>
-              <p className='mb-2' style={{}}>{data[0].description}</p>
-              <p  className='mb-0' style={{}}>Feels like {data[0].feels_like.toFixed()}&deg;k</p>
+            <h1 className='m-0 px-2 align-self-center' >{data[0].temp.toFixed()}&deg;C</h1>
+            <div className='mx-4 align-self-center' >
+              <h5 className='mb-0'  >{data[0].main}</h5>
+              <p className='mb-2' >{data[0].description}</p>
+              <p  className='mb-0' >Feels like {data[0].feels_like.toFixed()}&deg;C</p>
             </div>
           </div>
             
-          <div className='d-flex flex-wrap' style={{}}>
-            <div className='mx-2' style={{}}>
-              <p className='my-0' style={{}}>wind<i class="bi bi-info-circle"></i></p>
-              <h6 className='my-0' style={{}}>{data[0].speed}km/h</h6>
+          <div className='d-flex flex-wrap' >
+            <div className='mx-2' >
+              <p className='my-0' >wind<i class="bi bi-info-circle"></i></p>
+              <h6 className='my-0' >{data[0].speed}m/s</h6>
             </div>
-            <div className='mx-2' style={{}}>
-              <p className='my-0' style={{}}>Humidity<i class="bi bi-info-circle"></i></p>
-              <h6 className='my-0' style={{}}>{data[0].humidity}%</h6>
+            <div className='mx-2' >
+              <p className='my-0' >Humidity<i class="bi bi-info-circle"></i></p>
+              <h6 className='my-0' >{data[0].humidity}%</h6>
             </div>
-            <div className='mx-2' style={{}}>
-              <p className='my-0' style={{}}>Visibility<i class="bi bi-info-circle"></i></p>
-              <h6 className='my-0' style={{}}>{data[0].visibility}m</h6>
+            <div className='mx-2' >
+              <p className='my-0' >Visibility<i class="bi bi-info-circle"></i></p>
+              <h6 className='my-0' >{data[0].visibility}m</h6>
             </div>
-            <div className='mx-2' style={{}}>
-              <p className='my-0' style={{}}>Pressure<i class="bi bi-info-circle"></i></p>
-              <h6 className='my-0' style={{}}>{data[0].pressure}mb</h6>
+            <div className='mx-2' >
+              <p className='my-0' >Pressure<i class="bi bi-info-circle"></i></p>
+              <h6 className='my-0' >{data[0].pressure}hPa</h6>
             </div>
           </div>
         </div>
-        <div className="text-end d-flex flex-wrap justify-content-around align-items-center" style={{"height":"", "borderRadius": "10px", "flexBasis":"28%", "boxShadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
-          <div className='text-center' style={{}}>
-            <p className='my-0 p-0' style={{}}>sunrise</p>
+        <div className="col-12 my-md-0 my-4 py-4 mt-md-0 text-end d-flex flex-wrap justify-content-around align-items-center current-sun-style" >
+          <div className='text-center' >
+            <p className='my-0 p-0 fs-md-6 fs-4' >Sunrise</p>
             <h6 className=''>{data[0].formattedSunriseTime}</h6>
           </div>
           
           <SunriseSunsetProgressBar sunriseTime={data[0].sunriseTime} sunsetTime={data[0].sunsetTime} currentTime={data[0].currentTime} />
 
-          <div className='text-center py-0' style={{}}>
-            <p className='my-0 py-0'>sunset</p>
+          <div className='text-center py-0' >
+            <p className='my-0 py-0 fs-md-6 fs-4'>Sunset</p>
             <h6 className='my-0'>{data[0].formattedSunsetTime}</h6>
           </div>
 
         </div>
       </div>
     </div>
-    <div className='container-lg container-fluid p-0 my-4 '>
-      <h6 className='my-2' style={{color: "white"}}>6 DAYS FORECAST</h6>
-      <div className='container-fluid' style={{}}>
-      <Carousel centerMode={true} responsive={responsive}>
+    <div className='container-lg container-fluid px-4 p-lg-0 my-4 '>
+      <h6 className='mt-4 mb-3' style={{color: "white"}}>6 DAYS FORECAST</h6>
+      <div className='container-fluid' >
+      <Carousel responsive={responsive}>
         {btn.map((item, index)=>{
           const formattedDate= DateTime.fromFormat(item, 'MMMM dd, yyyy').toFormat('ccc, MMM d');
           return(
             <div key={index} onClick={()=> handleClick(item, index)} className={`btn-class ${active===index? "active": ""}`} >
               <div style={pseudoStylesButton}></div>
-              <h6 className='text-center py-1 my-0' style={{color: "white"}} >{index===0? "Today": formattedDate}</h6>
-              <div className='text-center p-0'><img className='' src={`http://openweathermap.org/img/wn/${btnIcon[index][0].weather[0].icon}.png`} alt="..." style={{"height":"auto", "width":"70%"}} /></div>
+              <h6 className='text-center pb-1 pt-2 mb-0' style={{color: "white"}} >{index===0? "Today": formattedDate}</h6>
+              <div className='text-center w-100 p-0'><img className='' src={`http://openweathermap.org/img/wn/${btnIcon[index][0].weather[0].icon}.png`} alt="..." style={{"height":"auto", "width":"70%"}} /></div>
             </div>
           )
         })}
@@ -236,9 +227,9 @@ function App() {
       </Carousel>
       </div>
     </div>
-    <div className='container-lg container-fluid p-0 my-4'>
-      <h5 style={{color: "white"}} >Tri-hourly forecast</h5>
-      <div className='container-fluid' style={{}}>
+    <div className='container-lg container-fluid px-4 p-lg-0 my-4'>
+      <h6 className='mt-4 mb-3' style={{color: "white"}} >TRI-HOURLY FORECAST</h6>
+      <div className='container-fluid' >
       <Carousel responsive={hourResponsive}>
       {forecast.map((item, index)=>{
           //const formattedDate= DateTime.fromFormat(item, 'MMMM dd, yyyy').toFormat('ccc, MMM d');
@@ -252,50 +243,50 @@ function App() {
 
           return(
             <div key={index} className='mx-2 p-0' style={{"minWidth":"340px"}} >
-        <div className='text-start p-3' style={{"flexBasis":"70%", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1)", position: "relative", zIndex: '2', borderRadius: "4px", color: 'white'}}>
+        <div className='text-start p-3 forecast-container'>
           <div className=' mb-4'>
           <div style={pseudoStylesDetail}></div>
-            <p className='my-0' style={{}}>{formattedTime}</p>
+          <p className='my-0' >{formattedTime}</p>
           </div>
-          <div className='d-flex flex-wrap mb-4' style={{}}>
+          <div className='d-flex flex-wrap mb-4' >
             <div className="" style={{"height":"100px"}}>
               <img className='' src={`http://openweathermap.org/img/wn/${icon}.png`} alt="..." style={{"boxShadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", "height":"100%", "width":"auto"}} />
             </div>
-            <h3 className='m-0 px-2' style={{}}>{temperature}&deg;K</h3>
-            <div className='mx-sm-4 mx-2' style={{}}>
-              <h5 className='mb-2 mt-sm-0 mt-3' style={{}}>{condition}</h5>
-              <p  className='mb-0' style={{}}>Feels like {feels_like}&deg;K</p>
+            <h3 className='m-0 px-2 align-self-center' >{temperature}&deg;C</h3>
+            <div className='mx-sm-4 mx-2 align-self-center' >
+              <h5 className='mb-2 mt-sm-0 mt-3' >{condition}</h5>
+              <p  className='mb-0' >Feels like {feels_like.toFixed()}&deg;K</p>
             </div>
           </div>
             
-          <div className='d-flex flex-wrap' style={{}}>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='my-0' style={{}}>wind</p>
-              <h6 className='my-0' style={{}}>{speed}km/hr</h6>
+          <div className='d-flex flex-wrap' >
+            <div className='m-md-2 m-2' >
+              <p className='my-0' >wind</p>
+              <h6 className='my-0' >{speed}m/s</h6>
             </div>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='my-0' style={{}}>Humidity</p>
-              <h6 className='my-0' style={{}}>{humidity}%</h6>
+            <div className='m-md-2 m-2' >
+              <p className='my-0' >Humidity</p>
+              <h6 className='my-0' >{humidity}%</h6>
             </div>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='my-0' style={{}}>Visibility</p>
-              <h6 className='my-0' style={{}}>{visibility}m</h6>
+            <div className='m-md-2 m-2' >
+              <p className='my-0' >Visibility</p>
+              <h6 className='my-0' >{visibility}m</h6>
             </div>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='my-0' style={{}}>Pressure</p>
-              <h6 className='my-0' style={{}}>{pressure}mb</h6>
+            <div className='m-md-2 m-2' >
+              <p className='my-0' >Pressure</p>
+              <h6 className='my-0' >{pressure}hPa</h6>
             </div>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='my-0' style={{}}>Cloudiness</p>
-              <h6 className='my-0' style={{}}>{all}%</h6>
+            <div className='m-md-2 m-2' >
+              <p className='my-0' >Cloudiness</p>
+              <h6 className='my-0' >{all}%</h6>
             </div>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='my-0' style={{}}>Precipitation</p>
-              <h6 className='my-0' style={{}}>{pop}%</h6>
+            <div className='m-md-2 m-2' >
+              <p className='my-0' >Precipitation</p>
+              <h6 className='my-0' >{pop}</h6>
             </div>
-            <div className='m-md-3 m-2' style={{}}>
-              <p className='m-0' style={{}}>Wind gust</p>
-              <h6 className='my-0' style={{}}>{gust}km/hr</h6>
+            <div className='m-md-2 m-2' >
+              <p className='m-0' >Wind gust</p>
+              <h6 className='my-0' >{gust}m/s</h6>
             </div>
           </div>
         </div>

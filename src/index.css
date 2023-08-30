@@ -74,3 +74,35 @@ body {
   color: white;
 }
 
+.current-data-style{
+  flex-basis: 70%;
+  position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.current-sun-style{
+  border-radius: 5px;
+  flex-basis:28%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@media screen and (max-width: 992px) {
+  .current-data-style{
+    flex-basis: 55%;
+  }
+  .current-sun-style{
+    flex-basis:43%;
+  }
+
+}
+
+.forecast-container{
+  flex-basis:70%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+  border-radius: 4px;
+  color: white;
+}

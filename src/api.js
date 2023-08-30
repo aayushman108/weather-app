@@ -61,7 +61,7 @@ async function getFormattedData(searchParams){
     .then(async(data)=>{
         const currentData= data;
         const {lat, lon}= data;
-        const forecastData= await getWeatherData('forecast', {lat, lon});
+        const forecastData= await getWeatherData('forecast', {lat, lon, units: "metric"});
         console.log([currentData, forecastData]);
         return [currentData, forecastData];
 
