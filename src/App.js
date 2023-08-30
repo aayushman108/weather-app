@@ -119,10 +119,10 @@ function App() {
 
     const fetchData = async (e) => {
       e.preventDefault();
+      try{
       const data = await getFormattedData({ q: cityName, units: "metric" });
-      if(!data.ok){
-        console.log(data);
-        setError(data);
+      if (!Array.isArray(data)) {
+        throw new Error(data);
       }
       const data1Keys= Object.keys(data[1]);
       const data1Values= Object.values(data[1]);
@@ -130,6 +130,11 @@ function App() {
       setData(data);
       setBtn(data1Keys);
       setBtnIcon(data1Values);
+    } 
+    catch(error){
+      console.log(error)
+      setError(error.message);
+    }
     };
 
     if(error){
