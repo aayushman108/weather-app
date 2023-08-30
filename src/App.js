@@ -45,9 +45,10 @@ function App() {
   },[])
 
   const backgroundImageUrl = process.env.PUBLIC_URL + '/images/weather.jpg';
-  const backgroundImageUrlCurrent = process.env.PUBLIC_URL + `/images/${data[0].main}.jpg`;
+  const backgroundImageUrlCurrent = process.env.PUBLIC_URL + `/images/${data.length>1? data[0].main : "weather"}.jpg`;
+  let bgImg; 
   if(backgroundImageUrlCurrent){
-    var bgImg= `url(${backgroundImageUrlCurrent})`;
+    bgImg= `url(${backgroundImageUrlCurrent})`;
   }else{
     bgImg= `url(${backgroundImageUrl})`;
   }
