@@ -1,18 +1,18 @@
 export const hourResponsive = {
     superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 6
+      breakpoint: { max: 4000, min: 1800 },
+      items: 4
     },
     desktop: {
-      breakpoint: { max: 3000, min: 1400 },
+      breakpoint: { max: 1800, min: 1200 },
       items: 3
     },
     tablet: {
-      breakpoint: { max: 1400, min: 950 },
+      breakpoint: { max: 1200, min: 760 },
       items: 2
     },
     mobileLandscape: {
-        breakpoint: { max: 950, min: 0},
+        breakpoint: { max: 760, min: 0},
         items: 1
       },
   };
@@ -35,7 +35,11 @@ export const hourResponsive = {
       items: 3
       },
     mobilePortrait: {
-      breakpoint: { max: 540, min: 0},
+      breakpoint: { max: 540, min: 370},
       items: 2
+    },
+    mobile: {
+      breakpoint: { max: 370, min: 0},
+      items: 1
     },
   };

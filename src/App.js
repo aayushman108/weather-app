@@ -18,7 +18,7 @@ function App() {
   const [error, setError]= useState('');
   const [active, setActive]= useState(0);
   const [unit, setUnit]= useState("metric");
-  const [home, setHome]= useState("")
+  const [home, setHome]= useState("");
    
   useEffect(()=>{
     navigator.geolocation.getCurrentPosition(
@@ -197,18 +197,18 @@ function App() {
           <h3 className='mb-0 mx-md-4 px-md-0 px-sm-2 px-4'>Weather</h3>
         </div>
 
-        <div className='d-sm-none d-block col-3 px-0 text-end' style={{}}>
-          <button className="search-btn" onClick={(e)=> fetchData(e)} disabled={!cityName}><i className="bi bi-search"></i></button>
+        <div className='d-sm-none d-block col-2 px-0 text-end' style={{}}>
+          <button className="search-btn px-sm-2 px-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i className="bi bi-search"></i></button>
         </div>
 
         <form className='col-lg-7 col-md-7 col-sm-6 d-none d-sm-block px-0  text-end py-2' style={{}}>
-          <input type="search" className='searchBar' value={cityName} onChange={e=> setCityName(e.target.value)} placeholder='search...' />
+          <input type="search" className='searchbar' value={cityName} onChange={e=> setCityName(e.target.value)} placeholder='search...' />
           <button className="search-btn" onClick={(e)=> fetchData(e)} disabled={!cityName}><i className="bi bi-search"></i></button>
         </form>
 
-        <div className='col-md-2 col-lg-1 col-sm-3 col-4 px-sm-0 pl-4  d-flex flex-wrap align-items-center justify-content-sm-center justify-content-start' style={{}}>
-          <button className={` temp-btn ${unit==="metric"? "active": ""}`} style={{}} onClick={(e)=> handleUnit(e, "metric")}>&deg;C</button>
-          <button className={`mx-1 temp-btn ${unit==="imperial"? "active": ""}`} style={{}} onClick={(e)=> handleUnit(e, "imperial")}>&deg;F</button>
+        <div className='col-md-2 col-lg-1 col-sm-3 col-5 px-sm-0 pl-4  d-flex flex-wrap align-items-center justify-content-center justify-content-start' style={{}}>
+          <button className={`px-sm-2 py-sm-1 py-2 px-3 temp-btn ${unit==="metric"? "active": ""}`} style={{}} onClick={(e)=> handleUnit(e, "metric")}>&deg;C</button>
+          <button className={`mx-1 px-sm-2 py-sm-1 py-2 px-3 temp-btn ${unit==="imperial"? "active": ""}`} style={{}} onClick={(e)=> handleUnit(e, "imperial")}>&deg;F</button>
         </div>
       </div>
     </div>
@@ -231,7 +231,7 @@ function App() {
               <img className='' src={`http://openweathermap.org/img/wn/${data[0].icon}.png`} alt="..." style={{"boxShadow": "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", "height":"100%", "width":"auto"}} />
             </div>
             <h1 className='m-0 px-2 align-self-center' >{data[0].temp.toFixed()}&deg;{tempUnit}</h1>
-            <div className='mx-4 align-self-center' >
+            <div className='mx-4 py-2 align-self-center' >
               <h5 className='mb-0'  >{data[0].main}</h5>
               <p className='mb-2' >{data[0].description}</p>
               <p  className='mb-0' >Feels like {data[0].feels_like.toFixed()}&deg;{tempUnit}</p>
@@ -239,19 +239,19 @@ function App() {
           </div>
             
           <div className='d-flex flex-wrap' >
-            <div className='mx-2' >
+            <div className='mx-2 mb-2' >
               <p className='my-0' >wind</p>
               <h6 className='my-0' >{data[0].speed}{velUnit}</h6>
             </div>
-            <div className='mx-2' >
+            <div className='mx-2 mb-2' >
               <p className='my-0' >Humidity</p>
               <h6 className='my-0' >{data[0].humidity}%</h6>
             </div>
-            <div className='mx-2' >
+            <div className='mx-2 mb-2' >
               <p className='my-0' >Visibility</p>
               <h6 className='my-0' >{data[0].visibility}m</h6>
             </div>
-            <div className='mx-2' >
+            <div className='mx-2 mb-2' >
               <p className='my-0' >Pressure</p>
               <h6 className='my-0' >{data[0].pressure}hPa</h6>
             </div>
@@ -291,7 +291,7 @@ function App() {
       </Carousel>
       </div>
     </div>
-    <div className='container-lg container-fluid px-4 p-lg-0 my-4'>
+    <div className='container-lg container-fluid px-sm-4 px-1 p-lg-0 my-4'>
       <h6 className='mt-4 mb-3' style={{color: "white"}} >TRI-HOURLY FORECAST</h6>
       <div className='container-fluid' >
       <Carousel responsive={hourResponsive}>
@@ -306,7 +306,7 @@ function App() {
           const formattedTime= localizedDateTime.toFormat('hh:mm a');
 
           return(
-            <div key={index} className='mx-2 p-0' style={{"minWidth":"340px"}} >
+            <div key={index} className='mx-2 p-0' style={{"minWidth":"320px"}} >
         <div className='text-start p-3 forecast-container'>
           <div className=' mb-4'>
           <div style={pseudoStylesDetail}></div>
@@ -362,6 +362,17 @@ function App() {
       </div>
     </div>
     </div>}
+
+    <div className="modal fade" style={{border: "none"}} id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal-dialog" style={{border: "none"}}>
+        <div className="modal-content text-center d-flex flex-wrap justify-content-center" style={{backgroundColor: "transparent", border:"none",  marginTop: "6em"}}>
+        <form className="d-flex align-self-center" style={{}}  role="search" >
+          <input type="search" className='modal-searchbar' style={{width: "70vw"}} value={cityName} onChange={e=> setCityName(e.target.value)} placeholder='search...' />
+          <button type="submit" className="modal-search-btn" style={{}} data-bs-dismiss="modal" onClick={(e)=> fetchData(e)} disabled={!cityName} >Search</button>
+        </form>
+        </div>
+      </div>
+    </div>
     </>
   );
 }
