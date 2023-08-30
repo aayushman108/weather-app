@@ -15,7 +15,7 @@ function App() {
   const [btn, setBtn]= useState([]);
   const [btnIcon, setBtnIcon]= useState([]);
   const [forecast, setForecast]= useState([]);
-  const [error, setError]= useState(null);
+  const [error, setError]= useState('');
   const [active, setActive]= useState(0);
    
   useEffect(()=>{
@@ -119,21 +119,39 @@ function App() {
 
     const fetchData = async (e) => {
       e.preventDefault();
-      try {
-        const data = await getFormattedData({ q: cityName, units: "metric" });
-        console.log(data)
-        setData(data)
-      } catch (error) {
-        setError(error.message)
+      const data = await getFormattedData({ q: cityName, units: "metric" });
+      if(!data.ok){
+        console.log(data);
+        setError(data);
       }
+      const data1Keys= Object.keys(data[1]);
+      const data1Values= Object.values(data[1]);
+      setForecast(data[1][data1Keys[0]]);
+      setData(data);
+      setBtn(data1Keys);
+      setBtnIcon(data1Values);
     };
 
     if(error){
-      return <h1 className='text-center' >Error fetching data:{error}</h1>
+      return (
+      <>
+      {cityName && <div className='d-flex flex-wrap justify-content-center align-items-center vw-100 vh-100'>
+        <h3 className='text-center' style={{color: "red"}} >{error} <i>{cityName}</i> not found</h3>
+        
+      </div>}
+      {!cityName && alert(error) }
+      </>
+      )
     }
 
     if(isLoading){
-      return <h1>loading...</h1>
+      return (
+        <div className='d-flex flex-wrap justify-content-center align-items-center vw-100 vh-100'>
+          <div className="spinner-border text-primary" style={{width: "3rem", height: "3rem"}} role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        )
     }
 
   return (
@@ -141,8 +159,11 @@ function App() {
     {data.length > 1 && <div style={styles}>
     <div style={pseudoStyles}></div>
     <div className="container-fluid" style={{"backgroundColor": "#e5e5ff"}}>
-      <div className='row justify-content-end py-2' >
-        <form className='col-12 text-end py-2' >
+      <div className='row justify-content-around py-2' >
+        <div className='col-4 d-flex flex-wrap align-items-center'>
+          <h3 className='mb-0'>Weather</h3>
+        </div>
+        <form className='col-md-6 col-8 text-end py-2' >
           <input type="search" className='searchBar' value={cityName} onChange={e=> setCityName(e.target.value)} placeholder='search...' />
           <button className="search-btn" onClick={(e)=> fetchData(e)} disabled={!cityName}><i className="bi bi-search"></i></button>
         </form>
@@ -255,7 +276,7 @@ function App() {
             <h3 className='m-0 px-2 align-self-center' >{temperature}&deg;C</h3>
             <div className='mx-sm-4 mx-2 align-self-center' >
               <h5 className='mb-2 mt-sm-0 mt-3' >{condition}</h5>
-              <p  className='mb-0' >Feels like {feels_like.toFixed()}&deg;K</p>
+              <p  className='mb-0' >Feels like {feels_like.toFixed()}&deg;C</p>
             </div>
           </div>
             

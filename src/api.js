@@ -14,7 +14,8 @@ function getWeatherData(info, searchParams){
         try{
             const response= await fetch(url);
             if(!response.ok){
-                throw new Error(`Error fetching data: ${response.status}`)
+                console.log(response);
+                throw new Error("Error fetching data:")
             }
             const data= await response.json();
             if(info==='weather'){
@@ -68,7 +69,7 @@ async function getFormattedData(searchParams){
     })
     .catch(error=>{
         console.error(error.message)
-        return error;
+        return error.message;
     })
 }
  export default getFormattedData;
