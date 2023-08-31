@@ -44,10 +44,12 @@ function App() {
     )
   },[])
 
-  const backgroundImageUrl = process.env.PUBLIC_URL + '/images/weather.jpg';
+  const imageArray=["Clear", "Clouds", "Haze", "Rain"];
+
+  const backgroundImageUrl = process.env.PUBLIC_URL + '/images/weather2.jpg';
   const backgroundImageUrlCurrent = process.env.PUBLIC_URL + `/images/${data.length>1? data[0].main : "weather"}.jpg`;
   let bgImg; 
-  if(backgroundImageUrlCurrent){
+  if(data.length>1 && imageArray.includes(data[0].main)){
     bgImg= `url(${backgroundImageUrlCurrent})`;
   }else{
     bgImg= `url(${backgroundImageUrl})`;
@@ -97,10 +99,10 @@ function App() {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: "white",
+    backgroundColor: "#e5e5ff",
     backgroundSize: 'cover',
     backgroundPosition: 'center', 
-    opacity: 0.2,
+    opacity: 0.1,
     zIndex: -1,
     borderRadius: "4px"
   };
@@ -113,10 +115,10 @@ function App() {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: "#4D2DB7",
+    backgroundColor: "#e5e5ff",
     backgroundSize: 'cover',
     backgroundPosition: 'center', 
-    opacity: 0.3,
+    opacity: 0.1,
     zIndex: -1,
     borderRadius: "4px"
   };
@@ -191,9 +193,10 @@ function App() {
     <>
     {data.length > 1 && <div style={styles}>
     <div style={pseudoStyles}></div>
+{/*.......................navbar-starts........................ */}
     <div className="container-fluid" style={{"backgroundColor": "#e5e5ff"}}>
       <div className='row justify-content-around py-2' >
-        <div className='col-lg-4 col-md-3 col-sm-3 col-5 d-flex px-0 flex-wrap align-items-center' style={{}}>
+        <div className='col-lg-4 col-md-3 col-sm-3 col-5 d-flex px-0 flex-wrap align-items-center'>
           <h3 className='mb-0 mx-md-4 px-md-0 px-sm-2 px-4'>Weather</h3>
         </div>
 
@@ -212,12 +215,15 @@ function App() {
         </div>
       </div>
     </div>
+{/*.......................navbar-ends........................ */}
+
     <div className="container-lg container-fluid px-lg-0 px-4 mt-4 mb-2 pt-4 pb-1" style={{"color":"white"}}>
       <div className='row row-cols-2 justify-content-between' >
         <div className='col-lg-3 col-4-md col-5 text-start p-0' >{data[0].place}, {data[0].country}</div>
         <div className="col-lg-3 col-4-md col-7 text-end p-0" >{data[0].formattedDate}</div>
       </div>
     </div>
+{/*.......................current-section-starts........................ */}
     <div className="container-lg container-fluid px-4 p-lg-0" style={{"color":"white"}}>
       <div className='row d-lg-flex flex-wrap justify-content-between flex-md-row flex-column p-0' >
         <div className='col-12 text-start p-3 current-data-style' >
@@ -273,6 +279,8 @@ function App() {
         </div>
       </div>
     </div>
+{/*.......................current-section-ends.....button-starts......................... */}
+
     <div className='container-lg container-fluid px-4 p-lg-0 my-4 '>
       <h6 className='mt-4 mb-3' style={{color: "white"}}>6 DAYS FORECAST</h6>
       <div className='container-fluid' >
@@ -291,8 +299,9 @@ function App() {
       </Carousel>
       </div>
     </div>
+{/*.......................button-ends.....forecast-starts......................... */}
     <div className='container-lg container-fluid px-sm-4 px-1 p-lg-0 my-4'>
-      <h6 className='mt-4 mb-3' style={{color: "white"}} >TRI-HOURLY FORECAST</h6>
+      <h6 className='mt-4 mb-3 px-sm-0 px-3' style={{color: "white"}} >TRI-HOURLY FORECAST</h6>
       <div className='container-fluid' >
       <Carousel responsive={hourResponsive}>
       {forecast.map((item, index)=>{
@@ -363,6 +372,13 @@ function App() {
     </div>
     </div>}
 
+{/*.......................forecast-ends......footer-starts.................. */}
+
+<div className="container-fluid text-center d-flex flex-wrap align-items-center justify-content-center" style={{height: "40px", "backgroundColor": "#e5e5ff"}}>
+  <p className="p-0 m-0">&copy; 2023 Weather. All rights reserved.</p>
+</div>
+
+{/*.......................modal-starts......footer-end.................. */}
     <div className="modal fade" style={{border: "none"}} id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div className="modal-dialog" style={{border: "none"}}>
         <div className="modal-content text-center d-flex flex-wrap justify-content-center" style={{backgroundColor: "transparent", border:"none",  marginTop: "6em"}}>
@@ -373,6 +389,7 @@ function App() {
         </div>
       </div>
     </div>
+{/*.......................modal-ends........................ */}
     </>
   );
 }

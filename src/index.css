@@ -42,7 +42,7 @@ body {
   margin: 0 10px;
 }
 .btn-class.active{
-  background-color: rgb(5, 5, 151, 0.4);
+  background-color: #1058a0;
 }
 
 .searchbar{
@@ -136,9 +136,9 @@ body {
   border: none;
 }
 .temp-btn:hover{
-  border: 2px solid rgb(5, 5, 151); 
+  border: 2px solid #064583; 
 }
 .temp-btn.active{
-  background-color: rgb(5, 5, 151);
+  background-color: #0b4c8e;
   color: white;
 }
